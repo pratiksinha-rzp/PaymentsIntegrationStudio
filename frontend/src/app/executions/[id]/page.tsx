@@ -1,3 +1,5 @@
+import ReplayExecutionButton from "@/components/ReplayExecutionButton";
+
 type Execution = {
     id: string;
     scenario_id?: string;
@@ -20,6 +22,7 @@ type ExecutionStep = {
     status: string;
     status_code?: number;
     request_url?: string;
+    request_method?: string;
     request_headers?: Record<string, unknown>;
     request_query_params?: Record<string, unknown>;
     request_body?: Record<string, unknown>;
@@ -377,14 +380,36 @@ export default async function ExecutionDetailPage({
                         Back
                     </a>
 
-                    <button
-                        type="button"
-                        disabled
-                        className="cursor-not-allowed rounded-lg bg-[#2f80ed] px-4 py-2.5 text-sm font-semibold text-white opacity-50"
-                        title="Replay will be connected in the next backend step"
-                    >
-                        Replay
-                    </button>
+                    {execution.trigger_type === "api_replay" &&
+                    steps.length > 0 ? (
+                        <ReplayExecutionButton
+                            executionId={execution.id}
+                            credentialId={execution.credential_id}
+                            method={
+                                steps[0].request_method ||
+                                "POST"
+                            }
+                            url={steps[0].request_url || ""}
+                            headers={
+                                steps[0].request_headers
+                            }
+                            queryParams={
+                                steps[0].request_query_params
+                            }
+                            body={
+                                steps[0].request_body
+                            }
+                        />
+                    ) : (
+                        <button
+                            type="button"
+                            disabled
+                            className="cursor-not-allowed rounded-lg bg-[#2f80ed] px-4 py-2.5 text-sm font-semibold text-white opacity-50"
+                            title="Replay is currently available for API Replay executions"
+                        >
+                            Replay
+                        </button>
+                    )}
                 </div>
             </header>
 
