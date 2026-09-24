@@ -21,6 +21,7 @@ type ExecutionStep = {
     status_code?: number;
     request_url?: string;
     request_headers?: Record<string, unknown>;
+    request_query_params?: Record<string, unknown>;
     request_body?: Record<string, unknown>;
     variables_resolved?: Record<string, unknown>;
     response_headers?: Record<string, string>;
@@ -64,29 +65,27 @@ function StatusBadge({
 
     return (
         <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${
-                success
+            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${success
                     ? "bg-emerald-50 text-emerald-700"
                     : pending
-                      ? "bg-amber-50 text-amber-700"
-                      : "bg-red-50 text-red-700"
-            }`}
+                        ? "bg-amber-50 text-amber-700"
+                        : "bg-red-50 text-red-700"
+                }`}
         >
             <span
-                className={`h-1.5 w-1.5 rounded-full ${
-                    success
+                className={`h-1.5 w-1.5 rounded-full ${success
                         ? "bg-emerald-500"
                         : pending
-                          ? "bg-amber-500"
-                          : "bg-red-500"
-                }`}
+                            ? "bg-amber-500"
+                            : "bg-red-500"
+                    }`}
             />
 
             {success
                 ? "Success"
                 : pending
-                  ? "Pending"
-                  : "Failed"}
+                    ? "Pending"
+                    : "Failed"}
         </span>
     );
 }
@@ -101,13 +100,12 @@ function StepStatusIcon({
 
     return (
         <div
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
-                success
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${success
                     ? "bg-emerald-50 text-emerald-600"
                     : pending
-                      ? "bg-amber-50 text-amber-600"
-                      : "bg-red-50 text-red-600"
-            }`}
+                        ? "bg-amber-50 text-amber-600"
+                        : "bg-red-50 text-red-600"
+                }`}
         >
             {success ? (
                 <svg
@@ -538,9 +536,9 @@ export default async function ExecutionDetailPage({
                                         >
                                             {index <
                                                 steps.length -
-                                                    1 && (
-                                                <div className="absolute left-[18px] top-9 h-[calc(100%+24px)] w-px bg-zinc-200" />
-                                            )}
+                                                1 && (
+                                                    <div className="absolute left-[18px] top-9 h-[calc(100%+24px)] w-px bg-zinc-200" />
+                                                )}
 
                                             <div className="relative flex gap-4">
                                                 <StepStatusIcon
@@ -610,6 +608,13 @@ export default async function ExecutionDetailPage({
                                                                     title="Headers"
                                                                     data={
                                                                         step.request_headers
+                                                                    }
+                                                                />
+
+                                                                <JsonBlock
+                                                                    title="Query Params"
+                                                                    data={
+                                                                        step.request_query_params
                                                                     }
                                                                 />
 
