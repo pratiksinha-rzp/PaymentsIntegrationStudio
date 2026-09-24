@@ -1,0 +1,33 @@
+# Environment / secrets
+.env
+.env.*
+*.env
+
+# macOS
+.DS_Store
+
+# Go
+/bin/
+/dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Logs
+*.log
+
+# IDE / editor
+.vscode/
+.idea/
+
+# Frontend dependencies/build
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Frontend env files
+frontend/.env*

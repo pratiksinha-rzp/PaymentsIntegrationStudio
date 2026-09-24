@@ -1,0 +1,213 @@
+@import "tailwindcss";
+
+:root {
+  /* ---------------------------------------------------------------------- */
+  /* Base                                                                    */
+  /* ---------------------------------------------------------------------- */
+
+  --background: #f5f5f7;
+  --foreground: #18181b;
+
+  /* ---------------------------------------------------------------------- */
+  /* Primary Theme                                                           */
+  /* ---------------------------------------------------------------------- */
+
+  --primary: #635bff;
+  --primary-hover: #5348e8;
+  --primary-soft: #f0eeff;
+  --primary-medium: #dcd8ff;
+  --primary-text: #554bdc;
+
+  /* ---------------------------------------------------------------------- */
+  /* Surfaces                                                                */
+  /* ---------------------------------------------------------------------- */
+
+  --surface: #ffffff;
+  --surface-muted: #fafafa;
+
+  /* ---------------------------------------------------------------------- */
+  /* Borders                                                                 */
+  /* ---------------------------------------------------------------------- */
+
+  --border: #e4e4e7;
+  --border-strong: #d4d4d8;
+
+  /* ---------------------------------------------------------------------- */
+  /* Text                                                                    */
+  /* ---------------------------------------------------------------------- */
+
+  --text-primary: #18181b;
+  --text-secondary: #3f3f46;
+  --muted: #71717a;
+  --muted-light: #a1a1aa;
+
+  /* ---------------------------------------------------------------------- */
+  /* Status                                                                  */
+  /* ---------------------------------------------------------------------- */
+
+  --success: #10b981;
+  --success-soft: #ecfdf5;
+  --success-text: #047857;
+
+  --warning: #f59e0b;
+  --warning-soft: #fffbeb;
+  --warning-text: #b45309;
+
+  --danger: #ef4444;
+  --danger-soft: #fef2f2;
+  --danger-text: #dc2626;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-medium: var(--primary-medium);
+  --color-primary-text: var(--primary-text);
+
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+
+  --color-muted: var(--muted);
+  --color-muted-light: var(--muted-light);
+
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-text: var(--success-text);
+
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-text: var(--warning-text);
+
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-text: var(--danger-text);
+
+  --font-sans: var(--font-mulish);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-mulish), Arial, Helvetica, sans-serif;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Existing Blue Tailwind Utilities → Primary Theme                          */
+/* -------------------------------------------------------------------------- */
+
+.bg-blue-50 {
+  background-color: var(--primary-soft) !important;
+}
+
+.bg-blue-100 {
+  background-color: var(--primary-medium) !important;
+}
+
+.bg-blue-200 {
+  background-color: var(--primary-medium) !important;
+}
+
+.bg-blue-500 {
+  background-color: var(--primary) !important;
+}
+
+.bg-blue-600 {
+  background-color: var(--primary) !important;
+}
+
+.bg-blue-700 {
+  background-color: var(--primary-hover) !important;
+}
+
+.text-blue-500 {
+  color: var(--primary-text) !important;
+}
+
+.text-blue-600 {
+  color: var(--primary-text) !important;
+}
+
+.text-blue-700 {
+  color: var(--primary-text) !important;
+}
+
+.text-blue-800 {
+  color: var(--primary-hover) !important;
+}
+
+.border-blue-100 {
+  border-color: var(--primary-medium) !important;
+}
+
+.border-blue-200 {
+  border-color: var(--primary-medium) !important;
+}
+
+.border-blue-300 {
+  border-color: var(--primary-medium) !important;
+}
+
+.ring-blue-100 {
+  --tw-ring-color: var(--primary-soft) !important;
+}
+
+.ring-blue-200 {
+  --tw-ring-color: var(--primary-medium) !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Small global interaction polish                                            */
+/* -------------------------------------------------------------------------- */
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--primary-medium);
+  color: var(--text-primary);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Primary action buttons                                                      */
+/* Keeps logo/avatar black while changing primary clickable actions.          */
+/* -------------------------------------------------------------------------- */
+
+button.bg-black,
+a.bg-black {
+  background-color: var(--primary) !important;
+}
+
+button.bg-black:hover,
+a.bg-black:hover {
+  background-color: var(--primary-hover) !important;
+}
