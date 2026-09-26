@@ -57,7 +57,7 @@ const navItems: NavItem[] = [
     },
     {
         label: "Webhooks",
-        href: "#",
+        href: "/webhooks",
         icon: (
             <svg
                 viewBox="0 0 24 24"

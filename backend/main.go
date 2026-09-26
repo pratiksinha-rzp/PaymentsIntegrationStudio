@@ -25,6 +25,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	defer db.Close()
 
 	// -------------------------------------------------------------------------
@@ -276,6 +277,19 @@ func main() {
 	http.HandleFunc("/api/v1/replay/api", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			replayHandler.ReplayAPI(w, r)
+			return
+		}
+
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+	})
+
+	// -------------------------------------------------------------------------
+	// Webhook Replay
+	// -------------------------------------------------------------------------
+
+	http.HandleFunc("/api/v1/replay/webhook", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			replayHandler.ReplayWebhook(w, r)
 			return
 		}
 

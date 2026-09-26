@@ -40,11 +40,44 @@ func NewClient(baseURL string) *Client {
 	}
 }
 
+// Do executes a request against the configured base URL.
+// It is used for Razorpay API calls and applies Basic Authentication.
 func (c *Client) Do(
 	ctx context.Context,
 	reqData Request,
 	keyID string,
 	keySecret string,
+) (*Response, error) {
+	return c.do(
+		ctx,
+		reqData,
+		keyID,
+		keySecret,
+		true,
+	)
+}
+
+// DoWithoutAuth executes an external HTTP request without applying
+// Razorpay Basic Authentication. This is used for webhook replay.
+func (c *Client) DoWithoutAuth(
+	ctx context.Context,
+	reqData Request,
+) (*Response, error) {
+	return c.do(
+		ctx,
+		reqData,
+		"",
+		"",
+		false,
+	)
+}
+
+func (c *Client) do(
+	ctx context.Context,
+	reqData Request,
+	keyID string,
+	keySecret string,
+	useBasicAuth bool,
 ) (*Response, error) {
 	var bodyReader io.Reader
 
@@ -94,8 +127,9 @@ func (c *Client) Do(
 		return nil, err
 	}
 
-	// Razorpay API authentication.
-	request.SetBasicAuth(keyID, keySecret)
+	if useBasicAuth {
+		request.SetBasicAuth(keyID, keySecret)
+	}
 
 	for key, value := range reqData.Headers {
 		request.Header.Set(key, stringValue(value))

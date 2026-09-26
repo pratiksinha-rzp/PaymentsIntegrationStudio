@@ -18,6 +18,12 @@ func NewRepository(db *pgxpool.Pool) *Repository {
 }
 
 func (r *Repository) Create(ctx context.Context, execution *Execution) error {
+	var credentialID interface{}
+
+	if execution.CredentialID != "" {
+		credentialID = execution.CredentialID
+	}
+
 	_, err := r.DB.Exec(ctx, `
 		INSERT INTO executions (
 			id,
@@ -30,7 +36,7 @@ func (r *Repository) Create(ctx context.Context, execution *Execution) error {
 	`,
 		execution.ID,
 		execution.ScenarioID,
-		execution.CredentialID,
+		credentialID,
 		execution.Status,
 		execution.TriggerType,
 	)

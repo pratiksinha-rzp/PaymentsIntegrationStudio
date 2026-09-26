@@ -201,6 +201,13 @@ function getExecutionTitle(
         return "API Replay";
     }
 
+    if (
+        execution.trigger_type ===
+        "webhook_replay"
+    ) {
+        return "Webhook Replay";
+    }
+
     return (
         execution.scenario_name ||
         "Execution"
@@ -216,6 +223,13 @@ function getStepTitle(
         "api_replay"
     ) {
         return "API Request";
+    }
+
+    if (
+        execution.trigger_type ===
+        "webhook_replay"
+    ) {
+        return "Webhook Request";
     }
 
     return (
@@ -380,10 +394,12 @@ export default async function ExecutionDetailPage({
                         Back
                     </a>
 
-                    {execution.trigger_type === "api_replay" &&
+                    {(execution.trigger_type === "api_replay" ||
+                        execution.trigger_type === "webhook_replay") &&
                     steps.length > 0 ? (
                         <ReplayExecutionButton
                             executionId={execution.id}
+                            triggerType={execution.trigger_type}
                             credentialId={execution.credential_id}
                             method={
                                 steps[0].request_method ||

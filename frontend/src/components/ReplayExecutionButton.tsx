@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 
 type ReplayExecutionButtonProps = {
     executionId: string;
-    credentialId: string;
+    triggerType: string;
+    credentialId?: string;
     method: string;
     url: string;
     headers?: Record<string, unknown>;
@@ -15,6 +16,7 @@ type ReplayExecutionButtonProps = {
 
 export default function ReplayExecutionButton({
     executionId,
+    triggerType,
     credentialId,
     method,
     url,
@@ -23,6 +25,7 @@ export default function ReplayExecutionButton({
     body,
 }: ReplayExecutionButtonProps) {
     const router = useRouter();
+
     const [isReplaying, setIsReplaying] = useState(false);
     const [error, setError] = useState("");
 
@@ -31,19 +34,36 @@ export default function ReplayExecutionButton({
         setError("");
 
         try {
-            const response = await fetch("/api/replay", {
+            const isWebhookReplay =
+                triggerType === "webhook_replay";
+
+            const endpoint = isWebhookReplay
+                ? "/api/webhooks/replay"
+                : "/api/replay";
+
+            const requestBody = isWebhookReplay
+                ? {
+                      method,
+                      url,
+                      headers: headers ?? {},
+                      query_params: queryParams ?? {},
+                      body: body ?? {},
+                  }
+                : {
+                      method,
+                      url,
+                      headers: headers ?? {},
+                      query_params: queryParams ?? {},
+                      body: body ?? {},
+                      credential_id: credentialId ?? "",
+                  };
+
+            const response = await fetch(endpoint, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    method,
-                    url,
-                    headers: headers ?? {},
-                    query_params: queryParams ?? {},
-                    body: body ?? {},
-                    credential_id: credentialId,
-                }),
+                body: JSON.stringify(requestBody),
             });
 
             const data = await response.json();
