@@ -1,3 +1,5 @@
+import RunScenarioButton from "@/components/RunScenarioButton";
+
 type Scenario = {
     id: string;
     name: string;
@@ -279,6 +281,11 @@ export default async function ScenarioDetailPage({
                     >
                         Edit Scenario
                     </a>
+
+                    <RunScenarioButton
+                        scenarioId={scenario.id}
+                        environment={scenario.environment}
+                    />
                 </div>
             </header>
 
