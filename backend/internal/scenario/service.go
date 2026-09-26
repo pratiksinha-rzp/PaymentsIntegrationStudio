@@ -70,3 +70,48 @@ func (s *Service) UpdateStep(
 ) error {
 	return s.repo.UpdateStep(ctx, step)
 }
+
+func (s *Service) Clone(
+	ctx context.Context,
+	id string,
+) (*Scenario, error) {
+	sourceScenario, err := s.repo.GetByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	sourceSteps, err := s.repo.GetSteps(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	clonedScenario := &Scenario{
+		Name:        "Copy of " + sourceScenario.Name,
+		Description: sourceScenario.Description,
+		Environment: sourceScenario.Environment,
+	}
+
+	if err := s.Create(ctx, clonedScenario); err != nil {
+		return nil, err
+	}
+
+	for _, sourceStep := range sourceSteps {
+		clonedStep := &ScenarioStep{
+			ScenarioID:     clonedScenario.ID,
+			StepOrder:      sourceStep.StepOrder,
+			Name:           sourceStep.Name,
+			Method:         sourceStep.Method,
+			URL:            sourceStep.URL,
+			VariablePrefix: sourceStep.VariablePrefix,
+			Headers:        sourceStep.Headers,
+			QueryParams:    sourceStep.QueryParams,
+			Body:           sourceStep.Body,
+		}
+
+		if err := s.CreateStep(ctx, clonedStep); err != nil {
+			return nil, err
+		}
+	}
+
+	return clonedScenario, nil
+}

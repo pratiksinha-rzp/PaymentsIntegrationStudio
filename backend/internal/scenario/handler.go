@@ -44,7 +44,11 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.service.Create(r.Context(), &scenario); err != nil {
-		http.Error(w, "failed to create scenario", http.StatusInternalServerError)
+		http.Error(
+			w,
+			"failed to create scenario",
+			http.StatusInternalServerError,
+		)
 		return
 	}
 
@@ -59,7 +63,11 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) GetAll(w http.ResponseWriter, r *http.Request) {
 	scenarios, err := h.service.GetAll(r.Context())
 	if err != nil {
-		http.Error(w, "failed to fetch scenarios", http.StatusInternalServerError)
+		http.Error(
+			w,
+			"failed to fetch scenarios",
+			http.StatusInternalServerError,
+		)
 		return
 	}
 
@@ -71,16 +79,30 @@ func (h *Handler) GetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetByID(w http.ResponseWriter, r *http.Request) {
-	id := strings.TrimPrefix(r.URL.Path, "/api/v1/scenarios/")
+	id := strings.TrimPrefix(
+		r.URL.Path,
+		"/api/v1/scenarios/",
+	)
 
 	if id == "" {
-		http.Error(w, "scenario id is required", http.StatusBadRequest)
+		http.Error(
+			w,
+			"scenario id is required",
+			http.StatusBadRequest,
+		)
 		return
 	}
 
-	scenario, err := h.service.GetByID(r.Context(), id)
+	scenario, err := h.service.GetByID(
+		r.Context(),
+		id,
+	)
 	if err != nil {
-		http.Error(w, "scenario not found", http.StatusNotFound)
+		http.Error(
+			w,
+			"scenario not found",
+			http.StatusNotFound,
+		)
 		return
 	}
 
@@ -91,18 +113,67 @@ func (h *Handler) GetByID(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
-	id := strings.TrimPrefix(r.URL.Path, "/api/v1/scenarios/")
+func (h *Handler) Clone(w http.ResponseWriter, r *http.Request) {
+	id := strings.TrimPrefix(
+		r.URL.Path,
+		"/api/v1/scenarios/",
+	)
+
+	id = strings.TrimSuffix(id, "/clone")
 
 	if id == "" {
-		http.Error(w, "scenario id is required", http.StatusBadRequest)
+		http.Error(
+			w,
+			"scenario id is required",
+			http.StatusBadRequest,
+		)
+		return
+	}
+
+	clonedScenario, err := h.service.Clone(
+		r.Context(),
+		id,
+	)
+	if err != nil {
+		http.Error(
+			w,
+			"failed to clone scenario: "+err.Error(),
+			http.StatusInternalServerError,
+		)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+
+	if err := json.NewEncoder(w).Encode(clonedScenario); err != nil {
+		return
+	}
+}
+
+func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
+	id := strings.TrimPrefix(
+		r.URL.Path,
+		"/api/v1/scenarios/",
+	)
+
+	if id == "" {
+		http.Error(
+			w,
+			"scenario id is required",
+			http.StatusBadRequest,
+		)
 		return
 	}
 
 	var input UpdateScenarioRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		http.Error(w, "invalid request body", http.StatusBadRequest)
+		http.Error(
+			w,
+			"invalid request body",
+			http.StatusBadRequest,
+		)
 		return
 	}
 
@@ -113,12 +184,22 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 		Environment: input.Environment,
 	}
 
-	if err := h.service.Update(r.Context(), &scenario); err != nil {
-		http.Error(w, "failed to update scenario", http.StatusInternalServerError)
+	if err := h.service.Update(
+		r.Context(),
+		&scenario,
+	); err != nil {
+		http.Error(
+			w,
+			"failed to update scenario",
+			http.StatusInternalServerError,
+		)
 		return
 	}
 
-	updatedScenario, err := h.service.GetByID(r.Context(), id)
+	updatedScenario, err := h.service.GetByID(
+		r.Context(),
+		id,
+	)
 	if err != nil {
 		http.Error(
 			w,
@@ -139,7 +220,11 @@ func (h *Handler) CreateStep(w http.ResponseWriter, r *http.Request) {
 	var step ScenarioStep
 
 	if err := json.NewDecoder(r.Body).Decode(&step); err != nil {
-		http.Error(w, "invalid request body", http.StatusBadRequest)
+		http.Error(
+			w,
+			"invalid request body",
+			http.StatusBadRequest,
+		)
 		return
 	}
 
@@ -154,13 +239,20 @@ func (h *Handler) CreateStep(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if scenarioID == "" {
-		http.Error(w, "scenario id is required", http.StatusBadRequest)
+		http.Error(
+			w,
+			"scenario id is required",
+			http.StatusBadRequest,
+		)
 		return
 	}
 
 	step.ScenarioID = scenarioID
 
-	if err := h.service.CreateStep(r.Context(), &step); err != nil {
+	if err := h.service.CreateStep(
+		r.Context(),
+		&step,
+	); err != nil {
 		log.Printf(
 			"failed to create scenario step: %v",
 			err,
@@ -197,7 +289,6 @@ func (h *Handler) UpdateStep(w http.ResponseWriter, r *http.Request) {
 		parts[1] != "steps" ||
 		parts[0] == "" ||
 		parts[2] == "" {
-
 		http.Error(
 			w,
 			"invalid scenario step path",
@@ -212,14 +303,21 @@ func (h *Handler) UpdateStep(w http.ResponseWriter, r *http.Request) {
 	var step ScenarioStep
 
 	if err := json.NewDecoder(r.Body).Decode(&step); err != nil {
-		http.Error(w, "invalid request body", http.StatusBadRequest)
+		http.Error(
+			w,
+			"invalid request body",
+			http.StatusBadRequest,
+		)
 		return
 	}
 
 	step.ID = stepID
 	step.ScenarioID = scenarioID
 
-	if err := h.service.UpdateStep(r.Context(), &step); err != nil {
+	if err := h.service.UpdateStep(
+		r.Context(),
+		&step,
+	); err != nil {
 		http.Error(
 			w,
 			"failed to update scenario step",
@@ -232,7 +330,6 @@ func (h *Handler) UpdateStep(w http.ResponseWriter, r *http.Request) {
 		r.Context(),
 		stepID,
 	)
-
 	if err != nil {
 		http.Error(
 			w,
@@ -273,7 +370,6 @@ func (h *Handler) GetSteps(w http.ResponseWriter, r *http.Request) {
 		r.Context(),
 		scenarioID,
 	)
-
 	if err != nil {
 		http.Error(
 			w,

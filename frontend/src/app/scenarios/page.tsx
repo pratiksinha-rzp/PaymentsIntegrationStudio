@@ -1,3 +1,5 @@
+import CloneScenarioButton from "@/components/CloneScenarioButton";
+
 type Scenario = {
     id: string;
     name: string;
@@ -17,11 +19,10 @@ function EnvironmentBadge({
 
     return (
         <span
-            className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
-                isTest
+            className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${isTest
                     ? "bg-blue-50 text-blue-700"
                     : "bg-red-50 text-red-700"
-            }`}
+                }`}
         >
             {environment}
         </span>
@@ -38,18 +39,16 @@ function StatusBadge({
 
     return (
         <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${
-                active
+            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${active
                     ? "bg-emerald-50 text-emerald-700"
                     : "bg-zinc-100 text-zinc-600"
-            }`}
+                }`}
         >
             <span
-                className={`h-1.5 w-1.5 rounded-full ${
-                    active
+                className={`h-1.5 w-1.5 rounded-full ${active
                         ? "bg-emerald-500"
                         : "bg-zinc-400"
-                }`}
+                    }`}
             />
 
             {active ? "Active" : status}
@@ -362,12 +361,18 @@ export default async function ScenariosPage() {
                                                 </td>
 
                                                 <td className="px-5 py-4 text-right">
-                                                    <a
-                                                        href={`/scenarios/${scenario.id}`}
-                                                        className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 transition hover:bg-zinc-50"
-                                                    >
-                                                        View
-                                                    </a>
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <a
+                                                            href={`/scenarios/${scenario.id}`}
+                                                            className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 transition hover:bg-zinc-50"
+                                                        >
+                                                            View
+                                                        </a>
+
+                                                        <CloneScenarioButton
+                                                            scenarioId={scenario.id}
+                                                        />
+                                                    </div>
                                                 </td>
                                             </tr>
                                         )

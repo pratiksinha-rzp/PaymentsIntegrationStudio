@@ -145,6 +145,12 @@ func main() {
 		// ---------------------------------------------------------------------
 
 		if r.Method == http.MethodPost {
+			// /api/v1/scenarios/{id}/clone
+			if strings.HasSuffix(path, "/clone") {
+				scenarioHandler.Clone(w, r)
+				return
+			}
+
 			// /api/v1/scenarios/{id}/steps
 			if strings.HasSuffix(path, "/steps") {
 				scenarioHandler.CreateStep(w, r)
