@@ -45,11 +45,13 @@ func (s *Service) Execute(
 
 	for _, scenarioStep := range steps {
 		executionStep := &execution.ExecutionStep{
-			ExecutionID:       executionID,
-			ScenarioStepID:    &scenarioStep.ID,
-			StepOrder:         scenarioStep.StepOrder,
-			Status:            "pending",
-			VariablesResolved: map[string]interface{}{},
+			ExecutionID:        executionID,
+			ScenarioStepID:     &scenarioStep.ID,
+			StepOrder:          scenarioStep.StepOrder,
+			Status:             "pending",
+			RequestMethod:      scenarioStep.Method,
+			RequestQueryParams: map[string]interface{}{},
+			VariablesResolved:  map[string]interface{}{},
 		}
 
 		if err := s.executionService.CreateStep(ctx, executionStep); err != nil {
